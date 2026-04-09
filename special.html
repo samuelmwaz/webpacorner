@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pa Corner | Specials & Offers</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #000;
+            --dark: #0a0a0a;
+            --dark2: #111;
+            --dark3: #181818;
+            --burgundy: #6D001A;
+            --burg-light: #9a0026;
+            --burg-glow: rgba(109,0,26,0.18);
+            --white: #fff;
+            --off-white: #f0ece4;
+            --gray: rgba(255,255,255,0.5);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        /* ── CURSOR ── */
+        .cursor { position:fixed; width:10px; height:10px; background:var(--burgundy); border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+        .cursor-ring { position:fixed; width:32px; height:32px; border:1px solid rgba(109,0,26,.5); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:left .1s ease,top .1s ease,width .3s,height .3s; }
+        body { cursor: none; }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed; width:100%; z-index:100;
+            padding: 22px 52px;
+            display: flex; justify-content:space-between; align-items:center;
+            transition: all .5s;
+        }
+        nav.scrolled {
+            background: rgba(0,0,0,.95);
+            border-bottom: 1px solid rgba(109,0,26,.25);
+            padding: 14px 52px;
+        }
+        .logo { font-family:'Bebas Neue',sans-serif; font-size:26px; letter-spacing:4px; color:var(--white); text-decoration:none; }
+        .logo span { color:var(--burgundy); }
+        .nav-links { display:flex; gap:40px; list-style:none; }
+        .nav-links a { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.55); text-decoration:none; transition:color .3s; font-weight:500; }
+        .nav-links a:hover, .nav-links a.active { color:var(--white); }
+        .nav-links a.active { border-bottom:1px solid var(--burgundy); padding-bottom:2px; }
+        .hamburger { display:none; flex-direction:column; gap:5px; cursor:none; }
+        .hamburger span { width:26px; height:1px; background:var(--white); transition:all .3s; }
+        .mobile-menu { position:fixed; inset:0; background:var(--black); z-index:90; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:36px; transform:translateX(100%); transition:transform .5s cubic-bezier(.77,0,.18,1); }
+        .mobile-menu.open { transform:translateX(0); }
+        .mobile-menu a { font-family:'Bebas Neue',sans-serif; font-size:48px; letter-spacing:6px; color:var(--white); text-decoration:none; }
+
+        /* ── HERO ── */
+        .specials-hero {
+            height: 52vh;
+            min-height: 380px;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 52px 64px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-bg-pattern {
+            position: absolute; inset: 0;
+            background:
+                repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(109,0,26,.07) 60px),
+                repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(109,0,26,.07) 60px);
+        }
+        .hero-bg-radial {
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 20% 100%, rgba(109,0,26,.35) 0%, transparent 70%);
+        }
+        .hero-bg-top { position:absolute; inset:0; background:linear-gradient(to bottom, var(--dark) 0%, transparent 40%, var(--dark) 100%); }
+        .hero-content { position:relative; z-index:2; }
+        .hero-eyebrow {
+            display: flex; align-items:center; gap:16px;
+            font-size:10px; letter-spacing:5px; text-transform:uppercase; color:var(--burgundy);
+            margin-bottom:18px;
+        }
+        .hero-eyebrow::before { content:''; width:36px; height:1px; background:var(--burgundy); }
+        h1.hero-title {
+            font-family:'Bebas Neue',sans-serif;
+            font-size: clamp(64px, 11vw, 140px);
+            line-height:.92;
+            letter-spacing:2px;
+        }
+        h1.hero-title .dim { color:rgba(255,255,255,.18); }
+        h1.hero-title .accent { color:var(--burgundy); }
+        .hero-desc {
+            font-family:'Cormorant Garamond',serif;
+            font-style:italic;
+            font-size: clamp(16px, 2vw, 22px);
+            color:rgba(255,255,255,.45);
+            margin-top:16px;
+            font-weight:300;
+        }
+
+        /* ── TICKER ── */
+        .ticker {
+            background:var(--burgundy);
+            overflow:hidden;
+            padding:13px 0;
+            white-space:nowrap;
+        }
+        .ticker-inner { display:inline-block; animation:tick 28s linear infinite; font-size:10px; letter-spacing:4px; text-transform:uppercase; font-weight:600; }
+        .ticker-inner span { margin:0 36px; }
+        .ticker-inner .sep { color:rgba(255,255,255,.35); }
+        @keyframes tick { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+        /* ── FILTER BAR ── */
+        .filter-bar {
+            display: flex;
+            align-items:center;
+            gap:8px;
+            padding:40px 52px 32px;
+            flex-wrap:wrap;
+        }
+        .filter-label { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:rgba(255,255,255,.3); margin-right:8px; }
+        .filter-btn {
+            background:none; border:1px solid rgba(255,255,255,.1);
+            color:rgba(255,255,255,.4);
+            padding:8px 20px; font-size:10px; letter-spacing:3px; text-transform:uppercase;
+            cursor:none; transition:all .3s; font-family:'Montserrat',sans-serif; font-weight:500;
+            border-radius:1px;
+        }
+        .filter-btn:hover { border-color:rgba(255,255,255,.3); color:var(--white); }
+        .filter-btn.active { background:var(--burgundy); border-color:var(--burgundy); color:var(--white); }
+        .item-count { margin-left:auto; font-size:10px; letter-spacing:2px; color:rgba(255,255,255,.25); }
+
+        /* ── MAIN GRID ── */
+        .specials-grid {
+            padding: 0 52px 80px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2px;
+        }
+
+        /* ── CARD ── */
+        .s-card {
+            background: var(--dark2);
+            border: 1px solid rgba(255,255,255,.05);
+            padding: 36px 32px;
+            position: relative;
+            overflow: hidden;
+            transition: all .4s;
+            animation: cardIn .5s ease both;
+        }
+        @keyframes cardIn { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+        .s-card:hover { border-color:rgba(109,0,26,.4); background:rgba(109,0,26,.06); transform:translateY(-4px); }
+        .s-card::after {
+            content:'';
+            position:absolute; bottom:0; left:0;
+            width:0; height:2px; background:var(--burgundy);
+            transition:width .5s;
+        }
+        .s-card:hover::after { width:100%; }
+
+        /* featured hero card */
+        .s-card.hero-card {
+            grid-column: span 2;
+            background: linear-gradient(135deg, rgba(109,0,26,.25) 0%, rgba(10,10,10,1) 60%);
+            border-color:rgba(109,0,26,.3);
+            padding: 48px 44px;
+        }
+        .s-card.hero-card .card-title { font-size:clamp(32px,4vw,52px); }
+
+        /* NEW card accent */
+        .s-card.type-new .card-corner { background:rgba(26,74,122,.9); }
+        .s-card.type-promo .card-corner { background:rgba(26,122,74,.9); }
+        .s-card.type-special .card-corner { background:var(--burgundy); }
+        .s-card.type-artist .card-corner { background:rgba(74,26,122,.9); }
+
+        .card-corner {
+            position:absolute; top:0; right:0;
+            padding:6px 14px;
+            font-size:8px; letter-spacing:3px; text-transform:uppercase; font-weight:700;
+        }
+
+        .card-type-icon {
+            width:48px; height:48px;
+            background:var(--burg-glow);
+            border:1px solid rgba(109,0,26,.3);
+            display:flex; align-items:center; justify-content:center;
+            font-size:18px; color:var(--burgundy);
+            margin-bottom:20px;
+        }
+        .s-card.type-new .card-type-icon { color:#80c8ff; background:rgba(26,74,122,.15); border-color:rgba(26,74,122,.3); }
+        .s-card.type-promo .card-type-icon { color:#80ffb4; background:rgba(26,122,74,.12); border-color:rgba(26,122,74,.3); }
+        .s-card.type-artist .card-type-icon { color:#c880ff; background:rgba(74,26,122,.15); border-color:rgba(74,26,122,.3); }
+
+        .card-category {
+            font-size:9px; letter-spacing:4px; text-transform:uppercase;
+            margin-bottom:10px; font-weight:600;
+        }
+        .type-special .card-category { color:var(--burgundy); }
+        .type-new .card-category { color:#80c8ff; }
+        .type-promo .card-category { color:#80ffb4; }
+        .type-artist .card-category { color:#c880ff; }
+
+        .card-title {
+            font-family:'Cormorant Garamond',serif;
+            font-size:clamp(22px,2.5vw,30px);
+            font-weight:600;
+            color:var(--white);
+            line-height:1.2;
+            margin-bottom:12px;
+        }
+        .card-desc {
+            font-size:13px;
+            color:rgba(255,255,255,.45);
+            line-height:1.75;
+            margin-bottom:20px;
+        }
+        .card-price {
+            font-family:'Bebas Neue',sans-serif;
+            font-size:40px;
+            color:var(--burgundy);
+            letter-spacing:2px;
+            line-height:1;
+        }
+        .type-new .card-price { color:#80c8ff; }
+        .type-promo .card-price { color:#80ffb4; }
+        .type-artist .card-price { color:#c880ff; }
+
+        .card-meta {
+            display:flex; gap:16px; flex-wrap:wrap;
+            margin-top:16px; padding-top:16px;
+            border-top:1px solid rgba(255,255,255,.05);
+        }
+        .card-meta-item {
+            display:flex; align-items:center; gap:7px;
+            font-size:10px; letter-spacing:2px; text-transform:uppercase;
+            color:rgba(255,255,255,.3);
+        }
+        .card-meta-item i { color:var(--burgundy); font-size:11px; }
+        .type-new .card-meta-item i { color:#80c8ff; }
+        .type-promo .card-meta-item i { color:#80ffb4; }
+        .type-artist .card-meta-item i { color:#c880ff; }
+
+        /* Artist card special layout */
+        .artist-header-img {
+            width:100%; height:160px;
+            object-fit:cover;
+            margin:-36px -32px 24px;
+            width:calc(100% + 64px);
+            display:block;
+            filter:saturate(.5) brightness(.7);
+            transition:filter .5s;
+        }
+        .s-card:hover .artist-header-img { filter:saturate(.9) brightness(.85); }
+
+        /* ── EMPTY STATE ── */
+        .empty-wrap {
+            grid-column: 1 / -1;
+            padding: 100px 40px;
+            text-align:center;
+        }
+        .empty-icon {
+            font-size:64px;
+            color:rgba(109,0,26,.3);
+            margin-bottom:24px;
+        }
+        .empty-title {
+            font-family:'Bebas Neue',sans-serif;
+            font-size:36px;
+            letter-spacing:4px;
+            color:rgba(255,255,255,.2);
+            margin-bottom:12px;
+        }
+        .empty-sub { font-size:12px; letter-spacing:2px; color:rgba(255,255,255,.15); text-transform:uppercase; }
+
+        /* ── COUNTDOWN ── */
+        .countdown-banner {
+            margin:0 52px 40px;
+            background:linear-gradient(135deg, rgba(109,0,26,.2), rgba(0,0,0,.5));
+            border:1px solid rgba(109,0,26,.3);
+            padding:28px 36px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            flex-wrap:wrap;
+            gap:20px;
+        }
+        .countdown-label { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:var(--burgundy); margin-bottom:6px; }
+        .countdown-text { font-family:'Cormorant Garamond',serif; font-size:22px; color:rgba(255,255,255,.7); }
+        .countdown-timer { display:flex; gap:20px; }
+        .countdown-unit { text-align:center; }
+        .countdown-num { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--white); line-height:1; }
+        .countdown-unit-label { font-size:8px; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:2px; }
+
+        /* ── SHARE BANNER ── */
+        .share-banner {
+            margin:0 52px 64px;
+            border:1px solid rgba(255,255,255,.05);
+            padding:28px 36px;
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:20px;
+            flex-wrap:wrap;
+        }
+        .share-text h5 { font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:3px; margin-bottom:4px; }
+        .share-text p { font-size:12px; color:rgba(255,255,255,.35); letter-spacing:1px; }
+        .share-btns { display:flex; gap:10px; }
+        .share-btn {
+            width:40px; height:40px; border:1px solid rgba(255,255,255,.1);
+            background:none; color:rgba(255,255,255,.5); cursor:none;
+            display:flex; align-items:center; justify-content:center;
+            font-size:15px; transition:all .3s; text-decoration:none;
+        }
+        .share-btn:hover { background:var(--burgundy); border-color:var(--burgundy); color:var(--white); }
+
+        /* ── FOOTER ── */
+        footer {
+            background:var(--black);
+            border-top:1px solid rgba(109,0,26,.2);
+            padding:36px 52px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            flex-wrap:wrap;
+            gap:16px;
+        }
+        footer .logo { font-size:20px; }
+        footer p { font-size:10px; letter-spacing:2px; color:rgba(255,255,255,.2); text-transform:uppercase; }
+        footer .back-btn {
+            display:flex; align-items:center; gap:8px;
+            font-size:10px; letter-spacing:3px; text-transform:uppercase;
+            color:rgba(255,255,255,.4); text-decoration:none; transition:color .3s;
+        }
+        footer .back-btn:hover { color:var(--white); }
+
+        /* ── PULSE DOT ── */
+        @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(109,0,26,.6)} 50%{box-shadow:0 0 0 8px rgba(109,0,26,0)} }
+        .live-dot {
+            width:8px; height:8px; border-radius:50%;
+            background:var(--burgundy);
+            display:inline-block;
+            animation:pulse 2s infinite;
+            margin-right:8px;
+        }
+
+        /* ── TOAST ── */
+        .toast { position:fixed; bottom:28px; right:28px; background:var(--dark2); border:1px solid var(--border,rgba(255,255,255,.07)); border-left:3px solid var(--burgundy); padding:14px 22px; font-size:12px; color:var(--white); z-index:9999; transform:translateY(80px); opacity:0; transition:all .4s cubic-bezier(.34,1.56,.64,1); }
+        .toast.show { transform:translateY(0); opacity:1; }
+
+        /* ── RESPONSIVE ── */
+        @media(max-width:900px){
+            nav,nav.scrolled { padding:18px 24px; }
+            .nav-links { display:none; }
+            .hamburger { display:flex; }
+            .specials-hero { padding:0 24px 48px; }
+            .filter-bar { padding:28px 24px 20px; }
+            .specials-grid { padding:0 24px 60px; grid-template-columns:1fr; }
+            .s-card.hero-card { grid-column:span 1; }
+            .countdown-banner,.share-banner { margin:0 24px 32px; }
+            footer { padding:28px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="home.html" onclick="closeMob()">Home</a>
+    <a href="special.html" onclick="closeMob()">Specials</a>
+    <a href="home.html#menu" onclick="closeMob()">Menu</a>
+    <a href="home.html#events" onclick="closeMob()">Events</a>
+    <a href="home.html#reservation" onclick="closeMob()">Reserve</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a class="logo" href="home.html">PA <span>CORNER</span></a>
+    <ul class="nav-links">
+        <li><a href="home.html">Home</a></li>
+        <li><a href="special.html" class="active">Specials</a></li>
+        <li><a href="home.html#menu">Menu</a></li>
+        <li><a href="home.html#events">Events</a></li>
+        <li><a href="home.html#reservation">Reserve</a></li>
+    </ul>
+    <div class="hamburger" id="ham" onclick="toggleMob()"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section class="specials-hero">
+    <div class="hero-bg-pattern"></div>
+    <div class="hero-bg-radial"></div>
+    <div class="hero-bg-top"></div>
+    <div class="hero-content">
+        <div class="hero-eyebrow"><span class="live-dot"></span>Live Now — Updated by Admin</div>
+        <h1 class="hero-title">
+            <span class="dim">TODAY'S</span><br>
+            <span>SPECIALS</span><br>
+            <span class="accent">&amp; OFFERS.</span>
+        </h1>
+        <p class="hero-desc">"The best deals in Lusaka — exclusively for Pa Corner guests."</p>
+    </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" id="tickerBar">
+    <div class="ticker-inner" id="tickerInner">
+        <span>Loading latest specials...</span>
+    </div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-banner" id="countdownBanner" style="display:none">
+    <div>
+        <div class="countdown-label">⏱ Happy Hour Ends In</div>
+        <div class="countdown-text">Grab your drinks before time runs out!</div>
+    </div>
+    <div class="countdown-timer">
+        <div class="countdown-unit"><div class="countdown-num" id="cd-h">00</div><div class="countdown-unit-label">Hrs</div></div>
+        <div class="countdown-unit" style="font-family:'Bebas Neue';font-size:44px;color:var(--burgundy);align-self:flex-start;line-height:1">:</div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-m">00</div><div class="countdown-unit-label">Min</div></div>
+        <div class="countdown-unit" style="font-family:'Bebas Neue';font-size:44px;color:var(--burgundy);align-self:flex-start;line-height:1">:</div>
+        <div class="countdown-unit"><div class="countdown-num" id="cd-s">00</div><div class="countdown-unit-label">Sec</div></div>
+    </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+    <span class="filter-label">Filter</span>
+    <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
+    <button class="filter-btn" onclick="filterCards('special',this)">🔥 Specials</button>
+    <button class="filter-btn" onclick="filterCards('new',this)">🆕 New Items</button>
+    <button class="filter-btn" onclick="filterCards('promo',this)">🔖 Promos</button>
+    <button class="filter-btn" onclick="filterCards('artist',this)">🎤 Artists</button>
+    <span class="item-count" id="itemCount">0 offers live</span>
+</div>
+
+<!-- GRID -->
+<div class="specials-grid" id="specialsGrid">
+    <!-- Populated by JS -->
+</div>
+
+<!-- SHARE -->
+<div class="share-banner">
+    <div class="share-text">
+        <h5>Share These Deals</h5>
+        <p>Let your friends know what's on at Pa Corner</p>
+    </div>
+    <div class="share-btns">
+        <a href="#" class="share-btn" onclick="shareWA()" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="#" class="share-btn" onclick="shareFB()" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" class="share-btn" onclick="copyLink()" title="Copy Link"><i class="fa-solid fa-link"></i></a>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <a class="logo" href="home.html">PA <span>CORNER</span></a>
+    <p>&copy; 2026 Pa Corner Bar · Tokyo Way, Lusaka</p>
+    <a href="home.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to Home</a>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    // ── CURSOR ──────────────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+        cursor.style.left = e.clientX+'px'; cursor.style.top = e.clientY+'px';
+        ring.style.left = e.clientX+'px'; ring.style.top = e.clientY+'px';
+    });
+    document.querySelectorAll('a,button').forEach(el => {
+        el.addEventListener('mouseenter', () => { cursor.style.width='18px'; cursor.style.height='18px'; ring.style.width='48px'; ring.style.height='48px'; });
+        el.addEventListener('mouseleave', () => { cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='32px'; ring.style.height='32px'; });
+    });
+
+    // ── NAV SCROLL ──────────────────────────────────────────────
+    window.addEventListener('scroll', () => {
+        document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // ── MOBILE MENU ─────────────────────────────────────────────
+    function toggleMob() { document.getElementById('mobileMenu').classList.toggle('open'); }
+    function closeMob() { document.getElementById('mobileMenu').classList.remove('open'); }
+
+    // ── LOAD DATA FROM LOCALSTORAGE ─────────────────────────────
+    function getStored(key) {
+        try { return JSON.parse(localStorage.getItem('pacorner_'+key) || '[]'); }
+        catch { return []; }
+    }
+
+    const specials = getStored('specials');
+    const drinks   = getStored('drinks');
+    const meals    = getStored('meals');
+    const promos   = getStored('promos');
+    const artists  = getStored('artists');
+    const tickers  = getStored('ticker');
+
+    // ── BUILD UNIFIED CARDS ARRAY ───────────────────────────────
+    let allCards = [];
+
+    specials.forEach((s,i) => allCards.push({
+        type:'special', hero: i===0,
+        icon:'fa-fire', category:'Daily Special',
+        title:s.name, desc:s.desc,
+        price:s.price,
+        meta:[
+            {icon:'fa-calendar-day', text:s.day||'Daily'},
+            {icon:'fa-clock', text:s.time||'All Day'},
+        ],
+        id:s.id
+    }));
+
+    drinks.filter(d=>d.tag).forEach(d=>allCards.push({
+        type:d.tag||'new', hero:false,
+        icon:'fa-champagne-glasses', category:`Drinks · ${d.cat}`,
+        title:d.name, desc:d.desc,
+        price:d.price,
+        meta:[{icon:'fa-tag', text:d.tag==='new'?'New Addition':d.tag==='promo'?'Promotion':'Special Offer'}],
+        id:d.id
+    }));
+
+    meals.filter(m=>m.tag).forEach(m=>allCards.push({
+        type:m.tag||'new', hero:false,
+        icon:'fa-fire-burner', category:`Grill · ${m.cat}`,
+        title:m.name, desc:m.desc,
+        price:m.price,
+        meta:[{icon:'fa-tag', text:m.tag==='new'?'New on Menu':m.tag==='promo'?'Promotion':'Special Offer'}],
+        id:m.id
+    }));
+
+    promos.forEach(p=>allCards.push({
+        type:'promo', hero:false,
+        icon:'fa-tag', category:'Promotion',
+        title:p.name, desc:p.desc,
+        price:p.price,
+        meta:[
+            ...(p.from?[{icon:'fa-calendar', text:`From ${p.from}`}]:[]),
+            ...(p.to?[{icon:'fa-calendar-check', text:`Until ${p.to}`}]:[])
+        ],
+        id:p.id
+    }));
+
+    artists.forEach(a=>allCards.push({
+        type:'artist', hero:false,
+        icon:'fa-microphone-lines', category:`Live Performance · ${a.genre}`,
+        title:a.name, desc:a.bio,
+        price:a.fee||'Free Entry',
+        img:a.img,
+        meta:[
+            ...(a.date?[{icon:'fa-calendar-star', text:a.date}]:[]),
+            ...(a.time?[{icon:'fa-clock', text:a.time}]:[]),
+            {icon:'fa-ticket', text:a.fee||'Free Entry'},
+        ],
+        id:a.id
+    }));
+
+    // Sort newest first
+    allCards.sort((a,b)=>b.id - a.id);
+
+    // ── RENDER ──────────────────────────────────────────────────
+    let currentFilter = 'all';
+
+    function renderCards(filter) {
+        currentFilter = filter;
+        const grid = document.getElementById('specialsGrid');
+        const filtered = filter==='all' ? allCards : allCards.filter(c=>c.type===filter);
+        document.getElementById('itemCount').textContent = `${filtered.length} offer${filtered.length!==1?'s':''} live`;
+
+        if (!filtered.length) {
+            grid.innerHTML = `
+                <div class="empty-wrap">
+                    <div class="empty-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                    <div class="empty-title">Nothing Here Yet</div>
+                    <div class="empty-sub">Check back soon — the admin is cooking something up</div>
+                </div>`;
+            return;
+        }
+
+        grid.innerHTML = filtered.map((card, idx) => {
+            const delay = Math.min(idx * 60, 400);
+            const isHero = card.hero && filter==='all';
+            const metaHTML = card.meta.map(m=>`<div class="card-meta-item"><i class="fa-solid ${m.icon}"></i>${m.text}</div>`).join('');
+            const imgHTML = card.img ? `<img src="${card.img}" alt="${card.title}" class="artist-header-img" onerror="this.style.display='none'">` : '';
+
+            return `
+            <div class="s-card type-${card.type} ${isHero?'hero-card':''}"
+                 style="animation-delay:${delay}ms"
+                 data-type="${card.type}">
+                <span class="card-corner">${
+                    card.type==='special'?'🔥 Special':
+                    card.type==='new'?'🆕 New':
+                    card.type==='promo'?'🔖 Promo':'🎤 Live'
+                }</span>
+                ${imgHTML}
+                <div class="card-type-icon"><i class="fa-solid ${card.icon}"></i></div>
+                <div class="card-category">${card.category}</div>
+                <div class="card-title">${card.title}</div>
+                ${card.desc ? `<div class="card-desc">${card.desc}</div>` : ''}
+                <div class="card-price">${card.price}</div>
+                ${card.meta.length ? `<div class="card-meta">${metaHTML}</div>` : ''}
+            </div>`;
+        }).join('');
+    }
+
+    function filterCards(type, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        renderCards(type);
+    }
+
+    // ── TICKER ──────────────────────────────────────────────────
+    function buildTicker() {
+        const msgs = [];
+        // Pull from admin ticker messages
+        tickers.forEach(t=>msgs.push(t.msg));
+        // Auto-generate from content if ticker is empty
+        if (!msgs.length) {
+            specials.forEach(s=>msgs.push(`🔥 ${s.name} — ${s.price} · ${s.day||'Daily'}`));
+            promos.forEach(p=>msgs.push(`🔖 ${p.name} — ${p.price}`));
+            artists.forEach(a=>msgs.push(`🎤 ${a.name} performing ${a.date?'on '+a.date:'soon'} · ${a.fee||'Free Entry'}`));
+        }
+        if (!msgs.length) msgs.push('🔥 Pa Corner — Best Vibes on Tokyo Way', '◆ Happy Hour 5PM–7PM Daily', '◆ No Cover Charge — Ever');
+        const inner = document.getElementById('tickerInner');
+        const txt = msgs.map(m=>`<span>${m}</span><span class="sep"> ◆ </span>`).join('');
+        inner.innerHTML = txt + txt;
+    }
+
+    // ── COUNTDOWN (Happy Hour: 5PM–7PM) ────────────────────────
+    function runCountdown() {
+        const now = new Date();
+        const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+        const happyStart = 17*3600, happyEnd = 19*3600;
+        const nowSec = h*3600 + m*60 + s;
+        const banner = document.getElementById('countdownBanner');
+
+        if (nowSec >= happyStart && nowSec < happyEnd) {
+            banner.style.display = 'flex';
+            const rem = happyEnd - nowSec;
+            const rh = Math.floor(rem/3600);
+            const rm = Math.floor((rem%3600)/60);
+            const rs = rem%60;
+            document.getElementById('cd-h').textContent = String(rh).padStart(2,'0');
+            document.getElementById('cd-m').textContent = String(rm).padStart(2,'0');
+            document.getElementById('cd-s').textContent = String(rs).padStart(2,'0');
+        } else {
+            banner.style.display = 'none';
+        }
+    }
+
+    // ── SHARE ───────────────────────────────────────────────────
+    function shareWA() {
+        const url = encodeURIComponent(location.href);
+        window.open(`https://wa.me/?text=Check out today's specials at Pa Corner! ${url}`,'_blank');
+    }
+    function shareFB() {
+        window.open(`https://facebook.com/sharer/sharer.php?u=${encodeURIComponent(location.href)}`,'_blank');
+    }
+    function copyLink() {
+        navigator.clipboard.writeText(location.href).then(()=>showToast('Link copied to clipboard!'));
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._t);
+        t._t = setTimeout(()=>t.classList.remove('show'), 3000);
+    }
+
+    // ── INIT ────────────────────────────────────────────────────
+    renderCards('all');
+    buildTicker();
+    runCountdown();
+    setInterval(runCountdown, 1000);
+
+    // Auto-refresh every 30s to pick up new admin posts
+    setInterval(()=>location.reload(), 30000);
+</script>
+</body>
+</html>

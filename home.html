@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pa Corner | The Pulse of Lusaka</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #000000;
+            --burgundy: #6D001A;
+            --burgundy-light: #9a0026;
+            --white: #ffffff;
+            --off-white: #f0ece4;
+            --gray: #888;
+            --dark: #0a0a0a;
+            --card-bg: rgba(255,255,255,0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--dark);
+            color: var(--off-white);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* CUSTOM CURSOR */
+        .cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--burgundy);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.3s, height 0.3s, background 0.3s;
+        }
+        .cursor-ring {
+            position: fixed;
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(109,0,26,0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: left 0.12s ease, top 0.12s ease;
+        }
+        body:hover .cursor { opacity: 1; }
+
+        /* NAV */
+        nav {
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+            padding: 24px 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+        nav.scrolled {
+            background: rgba(0,0,0,0.95);
+            padding: 16px 48px;
+            border-bottom: 1px solid rgba(109,0,26,0.3);
+        }
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 4px;
+            color: var(--white);
+        }
+        .logo span { color: var(--burgundy); }
+        .nav-links {
+            display: flex;
+            gap: 48px;
+            list-style: none;
+        }
+        .nav-links a {
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+        .nav-links a:hover { color: var(--white); }
+
+        /* HAMBURGER */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: none;
+            z-index: 200;
+        }
+        .hamburger span {
+            width: 28px; height: 1px;
+            background: var(--white);
+            transition: all 0.3s;
+        }
+        .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+        /* MOBILE MENU */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            transform: translateX(100%);
+            transition: transform 0.5s cubic-bezier(0.77,0,0.18,1);
+        }
+        .mobile-menu.open { transform: translateX(0); }
+        .mobile-menu a {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
+            letter-spacing: 6px;
+            color: var(--white);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .mobile-menu a:hover { color: var(--burgundy); }
+
+        /* HERO */
+        #home {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 48px 80px;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+        }
+        .hero-bg img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.35;
+            filter: saturate(0.7) contrast(1.2);
+        }
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                var(--dark) 0%,
+                rgba(10,10,10,0.6) 40%,
+                rgba(0,0,0,0.2) 100%
+            );
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+        .hero-tag {
+            font-size: 11px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--burgundy);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .hero-tag::before {
+            content: '';
+            width: 40px; height: 1px;
+            background: var(--burgundy);
+        }
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(72px, 12vw, 160px);
+            line-height: 0.9;
+            color: var(--white);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+        .hero-title .line-accent { color: var(--burgundy); }
+        .hero-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: clamp(18px, 2.5vw, 26px);
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 48px;
+            font-weight: 300;
+        }
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .btn-burg {
+            background: var(--burgundy);
+            color: var(--white);
+            padding: 16px 40px;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border: none;
+            cursor: none;
+            text-decoration: none;
+            transition: background 0.3s, transform 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        .btn-burg:hover { background: var(--burgundy-light); transform: translateY(-3px); }
+        .btn-outline {
+            background: transparent;
+            color: var(--white);
+            padding: 16px 40px;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255,255,255,0.25);
+            cursor: none;
+            transition: border-color 0.3s, transform 0.3s;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        .btn-outline:hover { border-color: var(--white); transform: translateY(-3px); }
+
+        /* SCROLL INDICATOR */
+        .scroll-ind {
+            position: absolute;
+            right: 48px;
+            bottom: 80px;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            font-size: 9px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+        }
+        .scroll-ind::after {
+            content: '';
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, rgba(109,0,26,0.8), transparent);
+            animation: scrollLine 2s infinite;
+        }
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            51% { transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* DIVIDER */
+        .orn-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 64px 0 48px;
+            color: rgba(109,0,26,0.6);
+            font-size: 10px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+        }
+        .orn-divider::before, .orn-divider::after {
+            content: '';
+            flex: 1;
+            max-width: 120px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(109,0,26,0.5));
+        }
+        .orn-divider::before { background: linear-gradient(to left, transparent, rgba(109,0,26,0.5)); }
+
+        /* SECTION HEADERS */
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            color: var(--burgundy);
+            margin-bottom: 16px;
+        }
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 7vw, 96px);
+            letter-spacing: 3px;
+            line-height: 0.95;
+            color: var(--white);
+        }
+        .section-title em {
+            font-style: italic;
+            font-family: 'Cormorant Garamond', serif;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0;
+        }
+
+        /* ABOUT SPLIT SECTION */
+        #about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 80vh;
+            overflow: hidden;
+        }
+        .about-img {
+            position: relative;
+            overflow: hidden;
+        }
+        .about-img img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: saturate(0.5) contrast(1.2);
+            transition: transform 1s ease;
+        }
+        .about-img:hover img { transform: scale(1.05); }
+        .about-img::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, transparent 60%, var(--dark));
+        }
+        .about-text {
+            padding: 80px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .about-text p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.6);
+            margin-top: 32px;
+            font-weight: 300;
+        }
+        .stat-row {
+            display: flex;
+            gap: 48px;
+            margin-top: 48px;
+            padding-top: 48px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .stat-item .num {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 56px;
+            color: var(--burgundy);
+            line-height: 1;
+        }
+        .stat-item .label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+        }
+
+        /* MENU SECTION */
+        #menu {
+            padding: 100px 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 64px;
+        }
+        .menu-tabs {
+            display: flex;
+            gap: 4px;
+        }
+        .tab-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.4);
+            padding: 10px 24px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: none;
+            transition: all 0.3s;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .tab-btn.active, .tab-btn:hover {
+            background: var(--burgundy);
+            border-color: var(--burgundy);
+            color: var(--white);
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+        }
+        .menu-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 40px 36px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 0; height: 2px;
+            background: var(--burgundy);
+            transition: width 0.4s;
+        }
+        .menu-card:hover::before { width: 100%; }
+        .menu-card:hover { background: rgba(109,0,26,0.08); }
+        .menu-card.featured {
+            background: var(--burgundy);
+            border-color: var(--burgundy);
+        }
+        .menu-card.featured .price, .menu-card.featured .item-name,
+        .menu-card.featured .item-desc, .menu-card.featured .item-icon { color: var(--white); }
+        .item-icon { font-size: 24px; color: var(--burgundy); margin-bottom: 20px; }
+        .item-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        .item-desc {
+            font-size: 13px;
+            color: rgba(255,255,255,0.45);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+        .price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            color: var(--burgundy);
+            letter-spacing: 2px;
+        }
+        .featured .price { color: rgba(255,255,255,0.8); }
+        .badge {
+            display: inline-block;
+            background: rgba(0,0,0,0.3);
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            margin-left: 12px;
+            border-radius: 2px;
+        }
+
+        /* SPECIALS TICKER */
+        .ticker-bar {
+            background: var(--burgundy);
+            overflow: hidden;
+            padding: 14px 0;
+            white-space: nowrap;
+        }
+        .ticker-inner {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+        .ticker-inner span { margin: 0 48px; }
+        .ticker-inner .dot { color: rgba(255,255,255,0.4); }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* EVENTS SECTION */
+        #events {
+            padding: 100px 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 64px;
+        }
+        .event-card {
+            border: 1px solid rgba(255,255,255,0.06);
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.4s;
+        }
+        .event-card:hover { transform: translateY(-8px); }
+        .event-card-img {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        .event-card-img img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: saturate(0.4);
+            transition: filter 0.5s, transform 0.5s;
+        }
+        .event-card:hover .event-card-img img {
+            filter: saturate(0.8);
+            transform: scale(1.05);
+        }
+        .event-day {
+            position: absolute;
+            top: 16px; left: 16px;
+            background: var(--burgundy);
+            padding: 8px 16px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            letter-spacing: 2px;
+        }
+        .event-body {
+            padding: 28px;
+            background: rgba(255,255,255,0.02);
+        }
+        .event-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 8px;
+        }
+        .event-meta {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.35);
+        }
+
+        /* GALLERY */
+        #gallery {
+            padding: 80px 0;
+        }
+        .gallery-title { padding: 0 48px; margin-bottom: 48px; }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 300px 300px;
+            gap: 3px;
+        }
+        .gallery-item {
+            overflow: hidden;
+            position: relative;
+        }
+        .gallery-item:first-child { grid-row: span 2; }
+        .gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            filter: saturate(0.5) brightness(0.8);
+            transition: all 0.6s;
+        }
+        .gallery-item:hover img { filter: saturate(1) brightness(1); transform: scale(1.05); }
+        .gallery-item::after {
+            content: '+';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: white;
+            opacity: 0;
+            background: rgba(109,0,26,0.4);
+            transition: opacity 0.4s;
+        }
+        .gallery-item:hover::after { opacity: 1; }
+
+        /* TESTIMONIAL */
+        #testimonials {
+            padding: 120px 48px;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .quote-mark {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 120px;
+            color: var(--burgundy);
+            line-height: 0.5;
+            opacity: 0.4;
+        }
+        .testimonial-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(22px, 3.5vw, 36px);
+            font-style: italic;
+            font-weight: 300;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.6;
+            margin: 24px 0;
+        }
+        .testimonial-author {
+            font-size: 10px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            color: var(--burgundy);
+        }
+        .testimonial-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 40px;
+        }
+        .dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            cursor: none;
+            transition: background 0.3s;
+        }
+        .dot.active { background: var(--burgundy); width: 24px; border-radius: 3px; }
+
+        /* RESERVATION */
+        #reservation {
+            background: var(--burgundy);
+            padding: 100px 48px;
+        }
+        .res-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .res-text .section-title { color: var(--white); }
+        .res-text p {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 24px;
+            line-height: 1.7;
+        }
+        .res-form { display: flex; flex-direction: column; gap: 16px; }
+        .res-form input, .res-form select {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 16px 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            outline: none;
+            transition: border-color 0.3s;
+            cursor: none;
+        }
+        .res-form input::placeholder { color: rgba(255,255,255,0.4); }
+        .res-form input:focus, .res-form select:focus { border-color: rgba(255,255,255,0.6); }
+        .res-form select { -webkit-appearance: none; }
+        .res-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .btn-white {
+            background: var(--white);
+            color: var(--burgundy);
+            border: none;
+            padding: 18px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            cursor: none;
+            transition: all 0.3s;
+            margin-top: 8px;
+        }
+        .btn-white:hover { background: var(--off-white); transform: translateY(-2px); }
+
+        /* LOCATION */
+        #location {
+            padding: 100px 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+        .map-placeholder {
+            height: 400px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+            color: rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .map-placeholder::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(109,0,26,0.15), transparent 70%);
+        }
+        .map-placeholder i { font-size: 48px; color: var(--burgundy); opacity: 0.7; }
+        .map-placeholder p { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; }
+        .info-block { margin-top: 40px; }
+        .info-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            padding: 24px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .info-row i { color: var(--burgundy); font-size: 16px; margin-top: 3px; width: 20px; }
+        .info-row h6 { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 4px; }
+        .info-row p { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: rgba(255,255,255,0.75); }
+
+        /* FOOTER */
+        footer {
+            background: var(--black);
+            padding: 64px 48px 32px;
+            border-top: 1px solid rgba(109,0,26,0.3);
+        }
+        .footer-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 64px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer-brand .logo { font-size: 32px; margin-bottom: 16px; display: block; }
+        .footer-brand p {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 16px;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.6;
+        }
+        .social-row {
+            display: flex;
+            gap: 16px;
+            margin-top: 28px;
+        }
+        .social-btn {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        .social-btn:hover { border-color: var(--burgundy); color: var(--white); background: var(--burgundy); }
+        .footer-col h6 {
+            font-size: 10px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 24px;
+        }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul li a {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 16px;
+            color: rgba(255,255,255,0.55);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-col ul li a:hover { color: var(--white); }
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 32px auto 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.2);
+            text-transform: uppercase;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--white);
+            color: var(--black);
+            padding: 16px 32px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+            z-index: 9997;
+            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ANIMATIONS */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+        .fade-up:nth-child(2) { transition-delay: 0.1s; }
+        .fade-up:nth-child(3) { transition-delay: 0.2s; }
+
+        /* AGE GATE */
+        .age-gate {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 32px;
+            text-align: center;
+            padding: 48px;
+        }
+        .age-gate .logo { font-size: 40px; margin-bottom: 8px; cursor: default; }
+        .age-gate h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 300;
+            color: rgba(255,255,255,0.8);
+            max-width: 600px;
+        }
+        .age-gate p {
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            max-width: 400px;
+        }
+        .age-btns { display: flex; gap: 16px; }
+        .age-gate.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.6s;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            nav { padding: 20px 24px; }
+            nav.scrolled { padding: 14px 24px; }
+            .nav-links { display: none; }
+            .hamburger { display: flex; }
+            #home { padding: 0 24px 80px; }
+            .hero-title { font-size: clamp(56px, 15vw, 90px); }
+            #about { grid-template-columns: 1fr; }
+            .about-img { height: 350px; }
+            .about-text { padding: 48px 24px; }
+            .menu-header { flex-direction: column; gap: 24px; align-items: flex-start; }
+            #menu, #events, #gallery .gallery-title { padding: 60px 24px; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .events-grid { grid-template-columns: 1fr; }
+            .gallery-grid { grid-template-columns: 1fr 1fr; }
+            .gallery-item:first-child { grid-row: auto; }
+            .res-inner { grid-template-columns: 1fr; gap: 40px; }
+            #reservation { padding: 60px 24px; }
+            #location { grid-template-columns: 1fr; padding: 60px 24px; }
+            .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+            .scroll-ind { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- CURSOR -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="cursorRing"></div>
+
+    <!-- AGE GATE -->
+    <div class="age-gate" id="ageGate">
+        <div class="logo">PA <span style="color:var(--burgundy)">CORNER</span></div>
+        <h2>You must be of legal drinking age to enter this site.</h2>
+        <p>By entering, you confirm you are 18 years of age or older.</p>
+        <div class="age-btns">
+            <button class="btn-burg" onclick="enterSite()" style="cursor:none">I Am 18 Or Older</button>
+            <a href="https://www.google.com" class="btn-outline" style="display:inline-block;text-decoration:none">I Am Under 18</a>
+        </div>
+    </div>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#home" onclick="closeMobileMenu()">Home</a>
+        <a href="#menu" onclick="closeMobileMenu()">Menu</a>
+        <a href="#events" onclick="closeMobileMenu()">Events</a>
+        <a href="#gallery" onclick="closeMobileMenu()">Gallery</a>
+        <a href="#reservation" onclick="closeMobileMenu()">Reserve</a>
+        <a href="#location" onclick="closeMobileMenu()">Find Us</a>
+
+    </div>
+
+    <!-- NAV -->
+    <nav id="navbar">
+        <div class="logo">PA <span>CORNER</span></div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="special.html" style="color:#c0394e;font-weight:700;border-bottom:1px solid var(--burgundy);padding-bottom:2px">🔥 Specials</a></li>
+            <li><a href="admin.html" style="color:#ce3f13;font-weight:700;border-bottom:1px solid var(--burgundy);padding-bottom:2px">🔥 admin</a></li>
+
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#events">Events</a></li>
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#reservation">Reserve</a></li>
+            <li><a href="#location">Find Us</a></li>
+        </ul>
+        <button class="btn-burg" onclick="document.getElementById('reservation').scrollIntoView({behavior:'smooth'})" style="padding:12px 28px;font-size:10px;cursor:none;display:none" id="navCta">Book Table</button>
+        <div class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="home">
+        <div class="hero-bg">
+            <img src="images/1.jpg" alt="Bar atmosphere">
+        </div>
+        <div class="hero-content">
+            <div class="hero-tag">Est. 2018 — Lusaka, Zambia</div>
+            <h1 class="hero-title">THE<br>PULSE<br>OF <span class="line-accent">LUSAKA.</span></h1>
+            <p class="hero-sub">"Where cold Mosi meets the finest vibes on Tokyo Way."</p>
+            <div class="hero-cta">
+                <a href="#menu" class="btn-burg">View Menu</a>
+                <button class="btn-outline" onclick="document.getElementById('reservation').scrollIntoView({behavior:'smooth'})">Reserve a Table</button>
+            </div>
+        </div>
+        <div class="scroll-ind">Scroll</div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker-bar">
+        <div class="ticker-inner">
+            <span>🔥 Happy Hour: 5PM – 7PM Daily</span><span class="dot">◆</span>
+            <span>Bucket of Mosi + Wings — Friday Nights</span><span class="dot">◆</span>
+            <span>Live DJ Every Friday & Saturday</span><span class="dot">◆</span>
+            <span>Signature Goat on the Grill All Day</span><span class="dot">◆</span>
+            <span>No Cover Charge — Ever</span><span class="dot">◆</span>
+            <span>🔥 Happy Hour: 5PM – 7PM Daily</span><span class="dot">◆</span>
+            <span>Bucket of Mosi + Wings — Friday Nights</span><span class="dot">◆</span>
+            <span>Live DJ Every Friday & Saturday</span><span class="dot">◆</span>
+            <span>Signature Goat on the Grill All Day</span><span class="dot">◆</span>
+            <span>No Cover Charge — Ever</span><span class="dot">◆</span>
+        </div>
+    </div>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="about-img">
+            <img src="https://images.unsplash.com/photo-1508006763-7b69f852e8c6?auto=format&fit=crop&q=80&w=1200" alt="Bar interior">
+        </div>
+        <div class="about-text">
+            <div class="section-label">Our Story</div>
+            <h2 class="section-title">MORE THAN<br>A BAR.<br><em>A Ritual.</em></h2>
+            <p>Pa Corner is where Lusaka exhales. Born on Tokyo Way, we've built a space where the city's energy — the music, the laughter, the cold ones — comes together under one roof. From the first Mosi to the last set of the night, this is your place.</p>
+            <div class="stat-row">
+                <div class="stat-item fade-up">
+                    <div class="num">7+</div>
+                    <div class="label">Years Running</div>
+                </div>
+                <div class="stat-item fade-up">
+                    <div class="num">50+</div>
+                    <div class="label">Items on Menu</div>
+                </div>
+                <div class="stat-item fade-up">
+                    <div class="num">∞</div>
+                    <div class="label">Good Times</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu">
+        <div class="menu-header">
+            <div>
+                <div class="section-label">Drinks & Grill</div>
+                <h2 class="section-title">LOCAL <em>Favorites</em></h2>
+            </div>
+            <div class="menu-tabs">
+                <button class="tab-btn active" onclick="switchTab(this, 'drinks')">Drinks</button>
+                <button class="tab-btn" onclick="switchTab(this, 'grill')">Grill</button>
+                <button class="tab-btn" onclick="switchTab(this, 'specials')">Specials</button>
+            </div>
+        </div>
+
+        <div class="menu-grid" id="menuGrid">
+            <!-- Drinks tab (default) -->
+            <div class="menu-card fade-up">
+                <div class="item-icon"><i class="fa-solid fa-beer-mug-empty"></i></div>
+                <div class="item-name">Local Lager</div>
+                <div class="item-desc">Ice-cold Mosi, Castle, and Windhoek. Served at sub-zero temperatures, the way it should be.</div>
+                <div class="price">K25.00</div>
+            </div>
+            <div class="menu-card featured fade-up">
+                <div class="item-icon" style="color:rgba(255,255,255,0.7)"><i class="fa-solid fa-champagne-glasses"></i></div>
+                <div class="item-name">Mosi Bucket <span class="badge">★ Best Seller</span></div>
+                <div class="item-desc">6 ice-cold Mosi bottles in a bucket of ice. Perfect for the crew.</div>
+                <div class="price">K130.00</div>
+            </div>
+            <div class="menu-card fade-up">
+                <div class="item-icon"><i class="fa-solid fa-martini-glass"></i></div>
+                <div class="item-name">Spirits & Mixers</div>
+                <div class="item-desc">Jameson, Konyagi, Savanna and more. Ask your barman for today's cocktail.</div>
+                <div class="price">From K45.00</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVENTS -->
+    <section id="events">
+        <div class="section-label">What's On</div>
+        <h2 class="section-title">UPCOMING <em>Events</em></h2>
+        <div class="events-grid">
+            <div class="event-card fade-up">
+                <div class="event-card-img">
+                    <img src="images/cool.jpg" alt="DJ Night">
+                    <div class="event-day">FRI</div>
+                </div>
+                <div class="event-body">
+                    <div class="event-title">Friday Night Sessions</div>
+                    <div class="event-meta">Every Friday · 8PM – Late · No Cover</div>
+                </div>
+            </div>
+            <div class="event-card fade-up">
+                <div class="event-card-img">
+                    <img src="images/4.jpg" alt="Grill Sunday">
+                    <div class="event-day">SUN</div>
+                </div>
+                <div class="event-body">
+                    <div class="event-title">Sunday Braai & Chill</div>
+                    <div class="event-meta">Every Sunday · 12PM – 8PM · Free Entry</div>
+                </div>
+            </div>
+            <div class="event-card fade-up">
+                <div class="event-card-img">
+                    <img src="images/dancing.jpg" alt="Happy Hour">
+                    <div class="event-day">DAILY</div>
+                </div>
+                <div class="event-body">
+                    <div class="event-title">Happy Hour</div>
+                    <div class="event-meta">Mon – Sun · 5PM – 7PM · All Drinks</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY -->
+    <section id="gallery">
+        <div class="gallery-title">
+            <div class="section-label">The Vibe</div>
+            <h2 class="section-title">FEEL THE <em>Atmosphere</em></h2>
+        </div>
+        <div class="gallery-grid">
+            <div class="gallery-item">
+                <img src="images/try.jpg" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="images/3.jpg" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="images/artist2.jpg" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="images/dancing.jpg" alt="">
+            </div>
+            <div class="gallery-item">
+                <img src="images/cool.jpg" alt="">
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+        <div class="quote-mark">"</div>
+        <div id="testimonialText" class="testimonial-text">
+            "Best spot in Lusaka. The goat meat alone is worth the trip — and the vibes on Friday nights are on another level."
+        </div>
+        <div class="testimonial-author" id="testimonialAuthor">— Chanda M., Regular</div>
+        <div class="testimonial-dots">
+            <div class="dot active" onclick="setTestimonial(0)"></div>
+            <div class="dot" onclick="setTestimonial(1)"></div>
+            <div class="dot" onclick="setTestimonial(2)"></div>
+        </div>
+    </section>
+
+    <!-- RESERVATION -->
+    <section id="reservation">
+        <div class="res-inner">
+            <div class="res-text">
+                <div class="section-label" style="color:rgba(255,255,255,0.5)">Book Ahead</div>
+                <h2 class="section-title">RESERVE<br>YOUR<br>TABLE.</h2>
+                <p>Big night coming up? Lock in your spot before we fill up. We'll have your drinks cold and your table ready.</p>
+            </div>
+            <div class="res-form">
+                <input type="text" placeholder="Your Name">
+                <input type="tel" placeholder="WhatsApp Number">
+                <div class="res-row">
+                    <input type="date" id="resDate">
+                    <input type="time" id="resTime" placeholder="Time">
+                </div>
+                <select>
+                    <option value="" disabled selected>Number of Guests</option>
+                    <option>1 – 2 People</option>
+                    <option>3 – 5 People</option>
+                    <option>6 – 10 People</option>
+                    <option>10+ (Large Group)</option>
+                </select>
+                <button class="btn-white" onclick="submitReservation()">Confirm Reservation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATION -->
+    <section id="location">
+        <div>
+            <div class="section-label">Find Us</div>
+            <h2 class="section-title">TOKYO<br>WAY.</h2>
+            <div class="info-block">
+                <div class="info-row">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div><h6>Address</h6><p>Tokyo Way (Ring Road), Lusaka, Zambia</p></div>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-clock"></i>
+                    <div><h6>Hours</h6><p>Mon – Thu: 10:00 – 00:00<br>Fri – Sun: 10:00 – Late</p></div>
+                </div>
+                <div class="info-row">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <div><h6>WhatsApp</h6><p>+260 97X XXX XXX</p></div>
+                </div>
+                <div class="info-row">
+                    <i class="fa-solid fa-car"></i>
+                    <div><h6>Parking</h6><p>Free parking on-site for all guests</p></div>
+                </div>
+            </div>
+        </div>
+        <div class="map-placeholder">
+            <i class="fa-solid fa-map-pin"></i>
+            <p>Tokyo Way, Lusaka</p>
+            <a href="https://maps.google.com/?q=Tokyo+Way+Lusaka+Zambia" target="_blank" class="btn-burg" style="margin-top:16px;text-decoration:none;cursor:none">Open in Maps</a>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <span class="logo">PA <span>CORNER</span></span>
+                <p>"Where cold Mosi meets the best vibes on Tokyo Way. Lusaka's living room since 2018."</p>
+                <div class="social-row">
+                    <a href="#" class="social-btn"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-whatsapp"></i></a>
+                    <a href="#" class="social-btn"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h6>Navigate</h6>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#events">Events</a></li>
+                    <li><a href="#gallery">Gallery</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>Info</h6>
+                <ul>
+                    <li><a href="#reservation">Reserve a Table</a></li>
+                    <li><a href="#location">Find Us</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>Hours</h6>
+                <ul>
+                    <li><a href="#">Mon–Thu: 10AM–Midnight</a></li>
+                    <li><a href="#">Fri–Sun: 10AM–Late</a></li>
+                    <li><a href="#">Happy Hour: 5PM–7PM</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Pa Corner Bar — Lusaka, Zambia</span>
+            <span>Not for persons under 18 · Drink Responsibly</span>
+        </div>
+    </footer>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // AGE GATE
+        function enterSite() {
+            document.getElementById('ageGate').classList.add('hidden');
+            setTimeout(() => document.getElementById('ageGate').remove(), 600);
+        }
+
+        // CUSTOM CURSOR
+        const cursor = document.getElementById('cursor');
+        const cursorRing = document.getElementById('cursorRing');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button, .dot, .gallery-item, .tab-btn, .menu-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '20px'; cursor.style.height = '20px';
+                cursorRing.style.width = '52px'; cursorRing.style.height = '52px';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '12px'; cursor.style.height = '12px';
+                cursorRing.style.width = '36px'; cursorRing.style.height = '36px';
+            });
+        });
+
+        // NAV SCROLL
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const cta = document.getElementById('navCta');
+            if (window.scrollY > 80) {
+                nav.classList.add('scrolled');
+                cta.style.display = 'block';
+            } else {
+                nav.classList.remove('scrolled');
+                cta.style.display = 'none';
+            }
+        });
+
+        // MOBILE MENU
+        function toggleMobileMenu() {
+            const m = document.getElementById('mobileMenu');
+            const h = document.getElementById('hamburger');
+            m.classList.toggle('open');
+            h.classList.toggle('open');
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburger').classList.remove('open');
+        }
+
+        // MENU TABS
+        const menuContent = {
+            drinks: [
+                { icon:'fa-beer-mug-empty', name:'Local Lager', desc:'Ice-cold Mosi, Castle, and Windhoek. Served sub-zero.', price:'K25.00', featured:false },
+                { icon:'fa-champagne-glasses', name:'Mosi Bucket <span class="badge">★ Best Seller</span>', desc:'6 ice-cold Mosi bottles in a bucket of ice. Perfect for the crew.', price:'K130.00', featured:true },
+                { icon:'fa-martini-glass', name:'Spirits & Mixers', desc:'Jameson, Konyagi, Savanna and more. Ask your barman for today\'s cocktail.', price:'From K45.00', featured:false },
+            ],
+            grill: [
+                { icon:'fa-fire-burner', name:'Signature Goat', desc:'Flame-grilled seasoned goat meat served with Nshima or Chips.', price:'K120.00', featured:true },
+                { icon:'fa-drumstick-bite', name:'Chicken Wings', desc:'Half or full plate, perfectly seasoned and grilled over charcoal.', price:'K65.00', featured:false },
+                { icon:'fa-utensils', name:'Mixed Grill Platter', desc:'Goat, chicken, and boerewors. Served with fries, Nshima and sides.', price:'K220.00', featured:false },
+            ],
+            specials: [
+                { icon:'fa-star', name:'Friday Special', desc:'Buy a bucket of Mosi, get a plate of wings at half price.', price:'K155.00', featured:true },
+                { icon:'fa-clock', name:'Happy Hour', desc:'All draught beers and house spirits. Every day, 5PM to 7PM.', price:'20% Off', featured:false },
+                { icon:'fa-users', name:'Group Package', desc:'10+ guests: reserved table, 2 buckets Mosi, 1 goat platter.', price:'K350.00', featured:false },
+            ]
+        };
+
+        function switchTab(btn, tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const grid = document.getElementById('menuGrid');
+            grid.style.opacity = '0';
+            grid.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                grid.innerHTML = menuContent[tab].map(item => `
+                    <div class="menu-card ${item.featured ? 'featured' : ''} fade-up">
+                        <div class="item-icon"><i class="fa-solid ${item.icon}"></i></div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="price">${item.price}</div>
+                    </div>
+                `).join('');
+                grid.style.transition = 'opacity 0.4s, transform 0.4s';
+                grid.style.opacity = '1';
+                grid.style.transform = 'translateY(0)';
+            }, 200);
+        }
+
+        // TESTIMONIALS
+        const testimonials = [
+            { text: '"Best spot in Lusaka. The goat meat alone is worth the trip — and the vibes on Friday nights are on another level."', author: '— Chanda M., Regular' },
+            { text: '"Pa Corner is where we end every big night out. The cold Mosi, the music, the crowd — it just hits different."', author: '— Mumba K., Lusaka' },
+            { text: '"Brought my whole team here for a work celebration. The group package was perfect and the staff were exceptional."', author: '— Thandiwe N., Corporate Guest' },
+        ];
+        function setTestimonial(i) {
+            const el = document.getElementById('testimonialText');
+            const auth = document.getElementById('testimonialAuthor');
+            el.style.opacity = '0';
+            setTimeout(() => {
+                el.textContent = testimonials[i].text;
+                auth.textContent = testimonials[i].author;
+                el.style.opacity = '1';
+            }, 300);
+            document.querySelectorAll('.dot').forEach((d, idx) => d.classList.toggle('active', idx === i));
+        }
+        // Auto-cycle testimonials
+        let tIdx = 0;
+        setInterval(() => { tIdx = (tIdx + 1) % testimonials.length; setTestimonial(tIdx); }, 6000);
+
+        // RESERVATION
+        function submitReservation() {
+            showToast('✓  Reservation Received — We\'ll Confirm via WhatsApp');
+        }
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3500);
+        }
+
+        // SCROLL ANIMATIONS
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.15 });
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+        // SMOOTH SCROLL
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Set today as min date for reservation
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('resDate').setAttribute('min', today);
+    </script>
+</body>
+</html>
